@@ -1,22 +1,20 @@
 import { Router } from 'express';
-import { validate } from '../middleware/validation.middleware';
-import { createUserSchema, updateUserSchema } from '../validations/user.validation';
 import { UserController } from '../controllers/user.controller';
+import { validate } from '../middleware/validation.middleware';
+import { createUserSchema, userQuerySchema } from '../validations/user.validation';
 
-export const userRouter = Router();
+const router = Router();
 const userController = new UserController();
 
-// Get all users
-userRouter.get('/', userController.getAllUsers.bind(userController));
+// Note: We're using the methods directly, not as function factories
+router.post('/', 
+    validate(createUserSchema), 
+    (req, res) => userController.createUser(req, res)
+);
 
-// Get user by id
-userRouter.get('/:id', userController.getUserById.bind(userController));
+router.get('/', 
+    validate(userQuerySchema), 
+    (req, res) => userController.getAllUsers(req, res)
+);
 
-// Create new user
-userRouter.post('/', validate(createUserSchema), userController.createUser.bind(userController));
-
-// Update user
-userRouter.put('/:id', validate(updateUserSchema), userController.updateUser.bind(userController));
-
-// Delete user
-userRouter.delete('/:id', userController.deleteUser.bind(userController));
+export { router as userRouter };

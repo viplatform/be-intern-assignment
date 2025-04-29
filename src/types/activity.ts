@@ -1,0 +1,1 @@
+export type ActivityType = 'post' | 'like' | 'follow';

@@ -1,28 +1,33 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import { UserFollow } from "./UserFollow";
+import { Post } from "./Post";
 
-@Entity('users')
+@Entity("users")  // Explicitly specify the table name
 export class User {
-  @PrimaryGeneratedColumn('increment')
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column({ type: 'varchar', length: 255 })
-  firstName: string;
+    @Column()
+    firstName: string;
 
-  @Column({ type: 'varchar', length: 255 })
-  lastName: string;
+    @Column()
+    lastName: string;
 
-  @Column({ type: 'varchar', length: 255, unique: true })
-  email: string;
+    @Column({ unique: true })
+    email: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
+    @CreateDateColumn()
+    createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @OneToMany(() => UserFollow, follow => follow.follower)
+    following: UserFollow[];
+
+    @OneToMany(() => UserFollow, follow => follow.following)
+    followers: UserFollow[];
+
+    @OneToMany(() => Post, post => post.author)
+    posts: Post[];
 }
