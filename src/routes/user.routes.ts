@@ -9,6 +9,12 @@ const userController = new UserController();
 // Get all users
 userRouter.get('/', userController.getAllUsers.bind(userController));
 
+// Get user followers
+userRouter.get('/:id/followers', userController.getFollowers.bind(userController));
+
+// Get user activity
+userRouter.get('/:id/activity', userController.getActivity.bind(userController));
+
 // Get user by id
 userRouter.get('/:id', userController.getUserById.bind(userController));
 
